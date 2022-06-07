@@ -22,9 +22,9 @@ public interface IDBRouterStrategy {
 
     /**
      * 手动设置分表路由
-     * @param tbKey 路由表，需要在配置范围内
+     * @param tbIdx 路由表，需要在配置范围内
      */
-    void setTBKey(int tbKey);
+    void setTBKey(int tbIdx);
 
     /**
      * 获取分库数
