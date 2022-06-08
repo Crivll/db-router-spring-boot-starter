@@ -26,6 +26,14 @@ public class PropertyUtil {
         }
     }
 
+    /**
+     * Spring Boot 1.x is compatible with Spring Boot 2.x by Using Java Reflect.
+     * @param environment : the environment context
+     * @param prefix : the prefix part of property key
+     * @param targetClass : the target class type of result
+     * @param <T> : refer to @param targetClass
+     * @return T
+     */
     @SuppressWarnings("unchecked")
     public static <T> T handle(final Environment environment, final String prefix, final Class<T> targetClass) {
         switch (springBootVersion) {
