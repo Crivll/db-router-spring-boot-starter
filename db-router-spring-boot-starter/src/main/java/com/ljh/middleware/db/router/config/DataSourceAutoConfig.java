@@ -3,15 +3,19 @@ package com.ljh.middleware.db.router.config;
 import com.ljh.middleware.db.router.DBRouterConfig;
 import com.ljh.middleware.db.router.DBRouterJoinPoint;
 import com.ljh.middleware.db.router.dynamic.DynamicDataSource;
+import com.ljh.middleware.db.router.dynamic.DynamicMybatisPlugin;
 import com.ljh.middleware.db.router.strategy.IDBRouterStrategy;
 import com.ljh.middleware.db.router.strategy.impl.DBRouterStrategyHashCode;
 import com.ljh.middleware.db.router.util.PropertyUtil;
+import org.apache.ibatis.plugin.Interceptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -69,6 +73,11 @@ public class DataSourceAutoConfig implements EnvironmentAware {
     }
 
     @Bean
+    public Interceptor plugin() {
+        return new DynamicMybatisPlugin();
+    }
+
+    @Bean
     public DataSource dataSource() {
         // 创建数据源
         Map<Object, Object> targetDataSources = new HashMap<>();
@@ -83,6 +92,17 @@ public class DataSourceAutoConfig implements EnvironmentAware {
         dynamicDataSource.setDefaultTargetDataSource(new DriverManagerDataSource(defaultDataSourceConfig.get("url").toString(), defaultDataSourceConfig.get("username").toString(), defaultDataSourceConfig.get("password").toString()));
 
         return dynamicDataSource;
+    }
+
+    @Bean
+    public TransactionTemplate transactionTemplate(DataSource dataSource) {
+        DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
+        dataSourceTransactionManager.setDataSource(dataSource);
+
+        TransactionTemplate transactionTemplate = new TransactionTemplate();
+        transactionTemplate.setTransactionManager(dataSourceTransactionManager);
+        transactionTemplate.setPropagationBehaviorName("PROPAGATION_REQUIRED");
+        return transactionTemplate;
     }
 
     @Override
