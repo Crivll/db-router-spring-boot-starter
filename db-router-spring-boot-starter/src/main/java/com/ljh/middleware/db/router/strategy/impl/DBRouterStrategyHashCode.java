@@ -31,7 +31,7 @@ public class DBRouterStrategyHashCode implements IDBRouterStrategy {
         int idx = (size - 1) & (dbKeyAttr.hashCode() ^ (dbKeyAttr.hashCode() >>> 16));
 
         // 库表索引
-        int dbIdx = idx / dbRouterConfig.getDbCount() + 1;
+        int dbIdx = idx / dbRouterConfig.getTbCount() + 1;
         int tbIdx = idx - dbRouterConfig.getTbCount() * (dbIdx - 1);
 
         // 设置到ThreadLocal
