@@ -22,7 +22,7 @@ public class PropertyUtil {
         try {
             Class.forName("org.springframework.boot.bind.RelaxedPropertyResolver");
         } catch (ClassNotFoundException e) {
-            springBootVersion = 1;
+            springBootVersion = 2;
         }
     }
 
