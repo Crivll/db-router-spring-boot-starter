@@ -50,7 +50,7 @@ public class DynamicMybatisPlugin implements Interceptor {
         BoundSql boundSql = statementHandler.getBoundSql();
         String sql = boundSql.getSql();
 
-        // 替换SQL表名 USER 为 USER_03
+        // 替换SQL表名 USER 为 USER_(动态获取)
         Matcher matcher = pattern.matcher(sql);
         String tableName = null;
         if (matcher.find()) {
